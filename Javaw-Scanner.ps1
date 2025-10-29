@@ -1,40 +1,10 @@
 function Analyze-MinecraftJavaw-V7 {
     param(
         [string]$ProcessName = "javaw",
-        [string[]]$ExplicitCheatArgs = @(
-            "-javaagent:",
-            "-Xbootclasspath/a:",
-            "client.wurst",
-            "aristois",
-            "meteor-client",
-            "impact.client",
-            "sigma5",
-            "kryptonite",
-            "liquidbounce",
-            "viaversion",
-            "viabackwards",
-            "cpw.mods.modlauncher",
-            "org.spongepowered.asm",
-            "net.minecraftforge.fml"
-        ),
-        [string[]]$ExplicitCheatPaths = @(
-            "$env:APPDATA\.minecraft\mods\wurst",
-            "$env:APPDATA\.minecraft\versions\wurst",
-            "$env:APPDATA\.minecraft\mods\kami",
-            "$env:APPDATA\.minecraft\libraries\aristois",
-            "$env:APPDATA\.minecraft\versions\aristois",
-            "$env:APPDATA\.minecraft\versions\liquidbounce",
-            "$env:APPDATA\.minecraft\versions\impact",
-            "$env:APPDATA\.minecraft\versions\doomsday",
-            "$env:APPDATA\.minecraft\meteor-client",
-            "$env:APPDATA\.minecraft\salhack",
-            "$env:LOCALAPPDATA\temp\temp_cheat.jar",
-            "$env:APPDATA\.config\cheats",
-            "$env:APPDATA\.minecraft\mods\fabric-api-hack.jar"
-        ),
-        [string[]]$SuspiciousFilePatterns = @(
-            "wurst", "aristois", "meteor", "impact", "sigma", "liquidbounce",
-            "kami", "salhack", "krypton", "doomsday", "cheat", "hack", "inject"
+        [string[]]$SuspiciousFragments = @(
+            "javaagent", "Xbootclasspath", "wurst", "aristois", "meteor", "impact",
+            "sigma", "kryptonite", "liquidbounce", "viaversion", "viabackwards",
+            "modlauncher", "spongepowered", "forge"
         ),
         [int]$MaxSuspiciousArgs = 0
     )
@@ -51,14 +21,17 @@ function Analyze-MinecraftJavaw-V7 {
     Write-Host " !!@!!!    !!@!!!      !!!       !!!!!:    !!!@!!!!  !!@!@!    !@!  !!!     !!!    !!!    " -ForegroundColor Cyan
     Write-Host "     !:!       !:!     !!:       !!:       !!:  !!!  !!: :!!   !!:  !!!     !!:    !!:    " -ForegroundColor Cyan
     Write-Host "    !:!       !:!       :!:      :!:       :!:  !:!  :!:  !:!  :!:  !:!     :!:    :!:    " -ForegroundColor Cyan
-    Write-Host ":::: ::   :::: ::       :: ::::   :: ::::  ::   :::  ::   :::   ::   ::      ::     ::  "  -ForegroundColor Cyan
-    Write-Host ":: : :    :: : :       : :: : :  : :: ::    :   : :   :   : :  ::    :      :       :"    -ForegroundColor Cyan
+    Write-Host ":::: ::   :::: ::       :: ::::   :: ::::  ::   :::  ::   :::   ::   ::      ::     ::  " -ForegroundColor Cyan
+    Write-Host ":: : :    :: : :       : :: : :  : :: ::    :   : :   :   : :  ::    :      :       :" -ForegroundColor Cyan
+    Write-Host "[JAVAW SCANNER BY SS LEARN IT]" -ForegroundColor Cyan
+    Draw-Separator
+    Write-Host ""
 
     $overallSuspiciousCount = 0
     $suspiciousResults = @()
     $suspiciousIndex = 1
 
-    Write-Host "🔬 FASE 1: Analisi in Tempo Reale (Argomenti Processo attivo)" -ForegroundColor White
+    Write-Host "🔬 FASE 1: Analisi in Tempo Reale (Frammenti sospetti negli argomenti di processo)" -ForegroundColor White
 
     $processes = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue
 
@@ -74,9 +47,9 @@ function Analyze-MinecraftJavaw-V7 {
             }
 
             $suspiciousArgsFound = @()
-            foreach ($arg in $ExplicitCheatArgs) {
-                if ($commandLine -like "*$arg*") {
-                    $suspiciousArgsFound += $arg
+            foreach ($fragment in $SuspiciousFragments) {
+                if ($commandLine -match $fragment) {
+                    $suspiciousArgsFound += $fragment
                 }
             }
 
@@ -85,61 +58,16 @@ function Analyze-MinecraftJavaw-V7 {
                 $suspiciousResults += [PSCustomObject]@{
                     Index = $suspiciousIndex++
                     Tipo = "Esecuzione Attiva (PID $($proc.Id))"
-                    Risultato = "Rilevata traccia di iniezione: $($suspiciousArgsFound -join ' | ')"
+                    Risultato = "Rilevata presenza di frammenti sospetti: $($suspiciousArgsFound -join ' | ')"
                 }
             }
         }
+
         if ($suspiciousResults.Count -eq 0) {
-            Write-Host "  > Nessun argomento di lancio esplicito rilevato." -ForegroundColor Green
+            Write-Host "  > Nessun frammento sospetto rilevato negli argomenti di processo." -ForegroundColor Green
         }
     } else {
         Write-Host "  > Nessun processo '$ProcessName' in esecuzione." -ForegroundColor DarkGray
-    }
-
-    Write-Host ""
-    Write-Host "📂 FASE 2: Analisi Forense (Tracce su Disco e Cartelle Minecraft)" -ForegroundColor White
-    $diskTracesFound = $false
-
-    foreach ($path in $ExplicitCheatPaths) {
-        $expandedPath = $ExecutionContext.InvokeCommand.ExpandString($path)
-        if (Test-Path -Path $expandedPath) {
-            $diskTracesFound = $true
-            $overallSuspiciousCount += 5
-            $baseName = Split-Path $expandedPath -Leaf
-            $suspiciousResults += [PSCustomObject]@{
-                Index = $suspiciousIndex++
-                Tipo = "Installazione Locale / Traccia"
-                Risultato = "Trovata traccia esplicita di cheat: **$baseName** in '$expandedPath'"
-            }
-        }
-    }
-
-    $scanFolders = @("mods", "resourcepacks", "libraries")
-    $baseMinecraftPath = "$env:APPDATA\.minecraft"
-
-    foreach ($folder in $scanFolders) {
-        $targetPath = Join-Path $baseMinecraftPath $folder
-        if (Test-Path $targetPath) {
-            $files = Get-ChildItem -Path $targetPath -Recurse -File -ErrorAction SilentlyContinue
-            foreach ($file in $files) {
-                $fileName = $file.Name.ToLower()
-                foreach ($pattern in $SuspiciousFilePatterns) {
-                    if ($fileName -like "*$pattern*") {
-                        $diskTracesFound = $true
-                        $overallSuspiciousCount += 3
-                        $suspiciousResults += [PSCustomObject]@{
-                            Index = $suspiciousIndex++
-                            Tipo = "File Sospetto in '$folder'"
-                            Risultato = "File sospetto rilevato: **$($file.Name)** in '$($file.DirectoryName)'"
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if (-not $diskTracesFound) {
-        Write-Host "  > Nessuna traccia di installazione di client noti rilevata." -ForegroundColor Green
     }
 
     Write-Host ""
@@ -149,7 +77,7 @@ function Analyze-MinecraftJavaw-V7 {
         $finalColor = if ($overallSuspiciousCount -ge 5) { "Red" } else { "DarkYellow" }
         $finalLabel = if ($overallSuspiciousCount -ge 5) { "ALLARME ROSSO - RISCHIO CRITICO" } else { "ALLARME GIALLO - RISCHIO MODERATO" }
 
-        Write-Host "🚨 RISULTATO FINALE: [ $finalLabel ] - $($overallSuspiciousCount) Indizi Sospetti Totali!" -ForegroundColor $finalColor
+        Write-Host "🚨 RISULTATO FINALE: [ $finalLabel ] - $($overallSuspiciousCount) Frammenti sospetti totali!" -ForegroundColor $finalColor
         Draw-Separator
 
         Write-Host "Dettaglio degli Index Sospetti Rilevati:" -ForegroundColor $finalColor
@@ -160,16 +88,15 @@ function Analyze-MinecraftJavaw-V7 {
         Write-Host ""
         Write-Host "👉 AZIONE CONSIGLIATA:" -ForegroundColor $finalColor
         if ($overallSuspiciousCount -ge 5) {
-            Write-Host "- BAN IMMEDIATO dell'utente (Installazione/Iniezione di cheat esplicita)." -ForegroundColor Red
-                } else {
-            Write-Host "- INDAGINE MANUALE e monitoraggio (Trovato un indizio debole o isolato)." -ForegroundColor DarkYellow
+            Write-Host "- BAN IMMEDIATO dell'utente (Presenza di frammenti altamente sospetti)." -ForegroundColor Red
+        } else {
+            Write-Host "- INDAGINE MANUALE e monitoraggio (Frammenti isolati o non conclusivi)." -ForegroundColor DarkYellow
         }
     }
     else {
-        Write-Host "✅ RISULTATO FINALE: [SAFE] Nessun indizio esplicito di cheat client noto rilevato." -ForegroundColor Green
+        Write-Host "✅ RISULTATO FINALE: [SAFE] Nessun frammento sospetto rilevato." -ForegroundColor Green
         Draw-Separator
     }
 }
 
 Analyze-MinecraftJavaw-V7
-
