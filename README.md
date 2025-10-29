@@ -5,7 +5,7 @@ Questo script è stato realizzato dal server discord SS LEARN IT (https://discor
 
 ## 🔍 Funzionalità
 
-- Analizza gli index del Javaw
+- Analizza i logs di mc e cerca eventuali ghost client
 - Riporta i risultati direttamente sul powershell
 
 
