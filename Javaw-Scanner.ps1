@@ -34,6 +34,7 @@ function Analyze-MinecraftJavaw-V7 {
             "$env:APPDATA\.minecraft\versions\aristois",
             "$env:APPDATA\.minecraft\versions\liquidbounce",
             "$env:APPDATA\.minecraft\versions\impact",
+            "$env:APPDATA\.minecraft\versions\doomsday
             # Meteor / Salhack
             "$env:APPDATA\.minecraft\meteor-client",
             "$env:APPDATA\.minecraft\salhack",
@@ -174,4 +175,5 @@ function Analyze-MinecraftJavaw-V7 {
 
 # Esegui la funzione
 Analyze-MinecraftJavaw-V7
+
 
