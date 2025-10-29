@@ -43,15 +43,16 @@ function Analyze-MinecraftJavaw-V7 {
         Write-Host "==================================================" -ForegroundColor DarkGray
     }
 
-    Write-Host -ForegroundColor Red " ██████╗  ██████╗    ██╗     ███████╗ █████╗ ██████╗ ███╗   ██╗"
-    Write-Host -ForegroundColor Red "██╔═══██╗██╔═══██╗   ██║     ██╔════╝██╔══██╗██╔══██╗████╗  ██║"
-    Write-Host -ForegroundColor Red "███████║███████║    ██║     █████╗  ███████║██████╔╝██╔████╔██║"
-    Write-Host -ForegroundColor Red "╚═══██╔╝ ╚═══██╔╝   ██║     ██╔══╝  ██╔══██║██╔══██╗██║╚██╔╝██║"
-    Write-Host -ForegroundColor Red "██████╔╝ ██████╔╝   ███████╗███████╗██║  ██║██║  ██║██║  ╚═╝ ██║"
-    Write-Host -ForegroundColor Red "╚═════╝  ╚═════╝    ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝"
-    Write-Host -ForegroundColor Red "[JAVAW SCANNER BY SS LEARN IT]"
-    Draw-Separator
-    Write-Host ""
+    Write-Host "@@@@@@    @@@@@@      @@@       @@@@@@@@   @@@@@@   @@@@@@@   @@@  @@@     @@@  @@@@@@@  " -ForegroundColor Cyan
+    Write-Host "@@@@@@@   @@@@@@@      @@@       @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@ @@@     @@@  @@@@@@@  " -ForegroundColor Cyan
+    Write-Host "!@@       !@@          @@!       @@!       @@!  @@@  @@!  @@@  @@!@!@@@     @@!    @@!    " -ForegroundColor Cyan
+    Write-Host "!@!       !@!          !@!       !@!       !@!  @!@  !@!  @!@  !@!!@!@!     !@!    !@!    " -ForegroundColor Cyan
+    Write-Host "!!@@!!    !!@@!!       @!!       @!!!:!    @!@!@!@!  @!@!!@!   @!@ !!@!     !!@    @!!    " -ForegroundColor Cyan
+    Write-Host " !!@!!!    !!@!!!      !!!       !!!!!:    !!!@!!!!  !!@!@!    !@!  !!!     !!!    !!!    " -ForegroundColor Cyan
+    Write-Host "     !:!       !:!     !!:       !!:       !!:  !!!  !!: :!!   !!:  !!!     !!:    !!:    " -ForegroundColor Cyan
+    Write-Host "    !:!       !:!       :!:      :!:       :!:  !:!  :!:  !:!  :!:  !:!     :!:    :!:    " -ForegroundColor Cyan
+    Write-Host ":::: ::   :::: ::       :: ::::   :: ::::  ::   :::  ::   :::   ::   ::      ::     ::  "  -ForegroundColor Cyan
+    Write-Host ":: : :    :: : :       : :: : :  : :: ::    :   : :   :   : :  ::    :      :       :"    -ForegroundColor Cyan
 
     $overallSuspiciousCount = 0
     $suspiciousResults = @()
@@ -171,3 +172,4 @@ function Analyze-MinecraftJavaw-V7 {
 }
 
 Analyze-MinecraftJavaw-V7
+
