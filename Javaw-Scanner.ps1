@@ -159,4 +159,6 @@ function Analyze-MinecraftJavaw-V7 {
         Write-Host ""
         Write-Host "👉 AZIONE CONSIGLIATA:" -ForegroundColor $finalColor
         if ($overallSuspiciousCount -ge 5) {
-            Write-Host "- BAN IMMEDIATO dell'utente (Installazione/Iniezione di cheat esplicita)."
+            Write-Host "- BAN IMMEDIATO dell'utente (Installazione/Iniezione di cheat esplicita)." -ForegroundColor Red
+        } else {
+            Write-Host "- INDAGINE MANUALE e monitoraggio (Trovato un indizio debole o isolato
