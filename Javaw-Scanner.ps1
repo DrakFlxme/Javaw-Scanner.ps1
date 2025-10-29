@@ -58,7 +58,7 @@ function Analyze-MinecraftJavaw-V7 {
     Write-Host -ForegroundColor Red "╚═══██╔╝ ╚═══██╔╝   ██║     ██╔══╝  ██╔══██║██╔══██╗██║╚██╔╝██║"
     Write-Host -ForegroundColor Red "██████╔╝ ██████╔╝   ███████╗███████╗██║  ██║██║  ██║██║  ╚═╝ ██║"
     Write-Host -ForegroundColor Red "╚═════╝  ╚═════╝    ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝"
-    Write-Host -ForegroundColor Red "                                 [SUITE DI RILEVAMENTO MINECRAFT - V7]"
+    Write-Host -ForegroundColor Red "[JAVAW SCANNER BY SS LEARN IT]"
     Draw-Separator
     Write-Host ""
     # ----------------------------------------------------
@@ -174,3 +174,4 @@ function Analyze-MinecraftJavaw-V7 {
 
 # Esegui la funzione
 Analyze-MinecraftJavaw-V7
+
